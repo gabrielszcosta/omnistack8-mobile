@@ -9,13 +9,17 @@ import {
   Platform
 } from "react-native";
 
+import api from "../services/api";
 import logo from "../assets/logo.png";
 
 export default function Login({ navigation }) {
-  const [user, setUser] = useState("");
+  const [username, usernameUser] = useState("");
 
-  function handleLogin() {
-    navigation.navigate("Main");
+  async function handleLogin() {
+    const response = await api.post("/devs", { username });
+    const { _id } = response.data;
+    console.log(_id);
+    navigation.navigate("Main", { _id });
   }
   return (
     <KeyboardAvoidingView
@@ -30,8 +34,8 @@ export default function Login({ navigation }) {
         style={styles.input}
         placeholder="Seu usuário no Github"
         placeholderTextColor="#999"
-        value={user}
-        onChangeText={setUser}
+        value={username}
+        onChangeText={usernameUser}
       />
       <TouchableOpacity onPress={handleLogin} style={styles.button}>
         <Text style={styles.buttonText}>Entrar</Text>
